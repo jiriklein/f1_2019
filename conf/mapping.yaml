@@ -5,3 +5,24 @@ type_mapping:
   int16: i
   float: f
   uint64: Q
+
+
+PacketHeader:
+  packet_format:
+    uint16
+  game_major_version:
+    uint8
+  game_minor_version:
+    uint8
+  packet_version:
+    uint8
+  packet_id:
+    uint8
+  session_uid:
+    uint64
+  session_time:
+    float
+  frame_identifier:
+    uint8
+  player_car_index:
+    uint8
