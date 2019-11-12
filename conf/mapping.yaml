@@ -1,3 +1,4 @@
+# https://docs.python.org/3.7/library/struct.html#format-characters
 type_mapping:
   uint8: B
   int8: b
