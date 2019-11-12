@@ -1,4 +1,5 @@
 PACKET_HEADER = {}
+MOTION_DATA_STRUCTURE = {}
 
 
 class F1Packet:
@@ -20,7 +21,11 @@ class F1Packet:
 
 
 class PacketMotionData(F1Packet):
-    pass
+    STRUCTURE = MOTION_DATA_STRUCTURE
+
+    def __init__(self, packet_type: int, buf: bytes):
+        super().__init__(packet_type, buf)
+        self._data_remainder = buf
 
 
 class PacketSessionData(F1Packet):

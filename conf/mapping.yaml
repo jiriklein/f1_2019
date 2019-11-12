@@ -1,10 +1,13 @@
 type_mapping:
   uint8: B
   int8: b
-  uint16: I
-  int16: i
+  uint16: H
+  int16: h
   float: f
   uint64: Q
+  uint: I
+  int: i
+  char: c
 
 
 PacketHeader:
@@ -23,6 +26,6 @@ PacketHeader:
   session_time:
     float
   frame_identifier:
-    uint8
+    uint
   player_car_index:
     uint8
