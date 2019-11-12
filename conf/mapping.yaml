@@ -1,0 +1,8 @@
+type_mapping:
+  uint8: B
+  int8: b
+  uint16: I
+  int16: i
+  float: f
+  uint64: Q
+
