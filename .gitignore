@@ -1,1 +1,10 @@
+# IntelliJ folders and files
 .idea/
+*.iml
+out/
+
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
