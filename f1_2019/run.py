@@ -9,7 +9,7 @@ def main():
     packet_queue = Queue()
     thread_end_event = Event()
     receiver = F1Receiver(output_q=packet_queue, thread_end_event=thread_end_event)
-    producer = F1Producer(queue=packet_queue, end_event=thread_end_event)
+    producer = F1Producer(input_q=packet_queue, thread_end_event=thread_end_event)
 
     with open("data/test_filepath.bin", "wb") as output_file:
         receiver_thread = Thread(target=receiver.listen)

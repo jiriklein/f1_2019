@@ -8,12 +8,12 @@ class F1Producer:
     _QUEUE_GET_TIMEOUT = 5.0
 
     def __init__(
-        self, queue: Queue, end_event: Event, config: Dict[str, Union[str, int]] = None
+        self, input_q: Queue, thread_end_event: Event, config: Dict[str, Union[str, int]] = None
     ):
         kafka_config = config or {"bootstrap.servers": "localhost:9092"}
         self._kafka_producer = None
-        self._queue = queue
-        self._end_event = end_event
+        self._queue = input_q
+        self._end_event = thread_end_event
         self.produced_messages = 0
 
     @classmethod
