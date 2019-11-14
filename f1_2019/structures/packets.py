@@ -1,27 +1,19 @@
 from ctypes import LittleEndianStructure
 
-from f1_2019.structures.structures import PACKET_HEADER, PACKET_MOTION_DATA
+from f1_2019.structures.structures import PACKET_HEADER, PACKET_MOTION_DATA, PACKET_SESSION_DATA
 
 
 class PacketHeader(LittleEndianStructure):
     # pack constant indicates tight packing (i.e. no byte-padding)
     # this is inherited all the way from _StructUnionMeta
     _pack_ = 1
-    # fields is the ctypes schema
+    # fields is the ctypes schema in structures file
     _fields_ = PACKET_HEADER
 
-    def __init__(self, fmt: str, packet_type: int, buf: bytes):
-        super().__init__(fmt)
-        self._packet_type = packet_type
-        if hasattr(self.__class__, "STRUCTURE"):
-            self.data = self.STRUCTURE  # here we work with named tuples
-        else:
-            self.data = {}
-
     @staticmethod
-    def read_from(buf: bytes):
-        header = PacketHeader.HEADER  # here we work with named tuples
-        packet_type = header["packet_id"]  # & 0x3
+    def read_from(buf: bytes) -> LittleEndianStructure:
+        header = PacketHeader.from_buffer_copy(buf)
+        packet_type = header["packet_id"]
         packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
         return packet_class(packet_type, buf)
 
@@ -29,13 +21,9 @@ class PacketHeader(LittleEndianStructure):
 class PacketMotionData(PacketHeader):
     _fields_ = PACKET_MOTION_DATA
 
-    def __init__(self, packet_type: int, buf: bytes):
-        super().__init__(packet_type, buf)
-        self._data_remainder = buf
-
 
 class PacketSessionData(PacketHeader):
-    pass
+    _fields_ = PACKET_SESSION_DATA
 
 
 class PacketLapData(PacketHeader):

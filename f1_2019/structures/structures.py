@@ -53,3 +53,56 @@ PACKET_MOTION_DATA = [
     ('angular_acceleration_z', ctypes.c_float),
     ('front_wheels_angle', ctypes.c_float),
 ]
+
+MARSHALL_ZONE = [
+    ('zone_start', ctypes.c_float),
+    ('zone_flag', ctypes.c_int8),
+]
+
+PACKET_SESSION_DATA = [
+    ('header', PACKET_HEADER),
+    ('weather', ctypes.c_uint8),
+    ('track_temperature', ctypes.c_int8),
+    ('air_temperature', ctypes.c_int8),
+    ('total_laps', ctypes.c_uint8),
+    ('track_length', ctypes.c_uint16),
+    ('session_type', ctypes.c_uint8),
+    ('track_id', ctypes.c_int8),
+    ('m_formula', ctypes.c_uint8),
+    ('session_time_left', ctypes.c_uint16),
+    ('session_duration', ctypes.c_uint16),
+    ('pit_speed_limit', ctypes.c_uint8),
+    ('game_paused', ctypes.c_uint8),
+    ('is_spectating', ctypes.c_uint8),
+    ('spectator_car_index', ctypes.c_uint8),
+    ('sli_pro_native_support', ctypes.c_uint8),
+    ('num_marshal_zones', ctypes.c_uint8),
+    ('marshal_zones', MARSHALL_ZONE * 21),
+    ('safety_car_status', ctypes.c_uint8),
+    ('network_game', ctypes.c_uint8)
+]
+
+LAP_DATA = [
+    ('last_lap_time', ctypes.c_float),
+    ('current_lap_time', ctypes.c_float),
+    ('best_lap_time', ctypes.c_float),
+    ('sector1_time', ctypes.c_float),
+    ('sector2_time', ctypes.c_float),
+    ('lap_distance', ctypes.c_float),
+    ('total_distance', ctypes.c_float),
+    ('safety_car_delta', ctypes.c_float),
+    ('car_position', ctypes.c_uint8),
+    ('current_lap_num', ctypes.c_uint8),
+    ('pit_status', ctypes.c_uint8),
+    ('sector', ctypes.c_uint8),
+    ('current_lap_invalid', ctypes.c_uint8),
+    ('penalties', ctypes.c_uint8),
+    ('grid_position', ctypes.c_uint8),
+    ('driver_status', ctypes.c_uint8),
+    ('result_status', ctypes.c_uint8),
+]
+
+PACKET_LAP_DATA = [
+    ('header', PACKET_HEADER),
+    ('lap_data', LAP_DATA),
+]
