@@ -7,13 +7,6 @@ class F1LittleEndianStructure(ctypes.LittleEndianStructure):
     _pack_ = 1
     # fields is the ctypes schema in structures file
 
-    @staticmethod
-    def read_from(buf: bytes) -> ctypes.LittleEndianStructure:
-        header = PacketHeader.from_buffer_copy(buf)
-        packet_type = header["packet_id"]
-        packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
-        return packet_class(packet_type, buf)
-
 
 class PacketHeader(F1LittleEndianStructure):
     _fields_ = [
@@ -27,6 +20,13 @@ class PacketHeader(F1LittleEndianStructure):
         ("frame_identifier", ctypes.c_uint32),
         ("player_car_index", ctypes.c_uint8),
     ]
+
+    @classmethod
+    def read_from(cls, buf: bytes) -> F1LittleEndianStructure:
+        header = cls.from_buffer_copy(buf)
+        packet_type = header["packet_id"]
+        packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
+        return packet_class(packet_type, buf)
 
 
 class MotionDataStructure(F1LittleEndianStructure):
