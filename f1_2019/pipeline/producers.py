@@ -1,6 +1,6 @@
 from queue import Queue, Empty
 from threading import Event
-from typing import Dict, Union, AnyStr, IO
+from typing import Dict, Union, AnyStr, IO, Any
 import json
 
 
@@ -17,10 +17,10 @@ class F1Producer:
         self.produced_messages = 0
 
     @classmethod
-    def make_kafka_packet(cls, topic_name: str, payload: dict):
+    def make_kafka_packet(cls, topic_name: str, payload: dict) -> Dict[str, Any]:
         return dict(topic=topic_name, key="telemetry", value=json.dumps(payload))
 
-    def write_to_file(self, file_output: IO[AnyStr]):
+    def write_to_file(self, file_output: IO[AnyStr]) -> None:
         while True and not self._end_event.is_set():
             try:
                 packet = self._queue.get(True, self._QUEUE_GET_TIMEOUT)
