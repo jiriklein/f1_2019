@@ -32,7 +32,7 @@ class F1Receiver:
         while True and not self._end_event.is_set():
             try:
                 data, address = self._socket.recvfrom(1400)
-                packet = PacketHeader.read_from(data)
+                packet = PacketHeader.unpack(data)
                 if packet:
                     self._queue.put(packet)
                     self.received_messages += 1

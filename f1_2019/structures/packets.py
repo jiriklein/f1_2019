@@ -22,7 +22,7 @@ class PacketHeader(F1LittleEndianStructure):
     ]
 
     @classmethod
-    def read_from(cls, buf: bytes) -> F1LittleEndianStructure:
+    def unpack(cls, buf: bytes) -> F1LittleEndianStructure:
         header = cls.from_buffer_copy(buf)
         packet_type = header["packet_id"]
         packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
