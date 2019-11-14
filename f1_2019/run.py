@@ -11,7 +11,7 @@ def main():
     receiver = F1Receiver(output_q=packet_queue, thread_end_event=thread_end_event)
     producer = F1Producer(queue=packet_queue, end_event=thread_end_event)
 
-    with open('test_filepath.bin', 'wb') as output_file:
+    with open("data/test_filepath.bin", "wb") as output_file:
         receiver_thread = Thread(target=receiver.listen)
         producer_thread = Thread(target=producer.write_to_file(output_file))
 
@@ -27,7 +27,7 @@ def main():
         # enter interaction loop as other threads are running in the background
         while True:
             try:
-                choice = input('> ')
+                choice = input("> ")
                 # if the user writes end, stop all processing gracefully and exit
                 if choice.lower() == "end":
                     thread_end_event.set()
@@ -35,9 +35,17 @@ def main():
                         _thread.join()
                     break
 
-                if choice.lower() in ["messages", "count", "message count", "msg count", "msg"]:
-                    print(f"Received message count: {receiver.received_messages}\n" +
-                          f"Produced message count: {producer.produced_messages}")
+                if choice.lower() in [
+                    "messages",
+                    "count",
+                    "message count",
+                    "msg count",
+                    "msg",
+                ]:
+                    print(
+                        f"Received message count: {receiver.received_messages}\n"
+                        + f"Produced message count: {producer.produced_messages}"
+                    )
 
             except KeyboardInterrupt:
                 thread_end_event.set()
@@ -46,5 +54,5 @@ def main():
                 break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
