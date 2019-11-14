@@ -10,7 +10,7 @@ class F1Receiver:
     _MULTICAST_ANY = "224.0.0.1"
     _SOCKET_TIMEOUT = 10.0
 
-    def __init__(self, output_q: Queue, thread_end_event: Event, port: int = 5606):
+    def __init__(self, output_q: Queue, thread_end_event: Event, port: int = 20777):
         self._queue = output_q
         self._port = port
         self._end_event = thread_end_event

@@ -24,7 +24,9 @@ class F1Producer:
         while True and not self._end_event.is_set():
             try:
                 packet = self._queue.get(True, self._QUEUE_GET_TIMEOUT)
-                file_output.write(packet)
+                if hasattr(packet, 'lap_data'):
+                    print(packet.lap_data[0].total_distance)
+                # file_output.write(packet)
                 self.produced_messages += 1
 
             except Empty:

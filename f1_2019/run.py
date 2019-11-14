@@ -11,9 +11,9 @@ def main():
     receiver = F1Receiver(output_q=packet_queue, thread_end_event=thread_end_event)
     producer = F1Producer(input_q=packet_queue, thread_end_event=thread_end_event)
 
-    with open("data/test_filepath.bin", "wb") as output_file:
+    with open("test_filepath.txt", "w") as output_file:
         receiver_thread = Thread(target=receiver.listen)
-        producer_thread = Thread(target=producer.write_to_file(output_file))
+        producer_thread = Thread(target=producer.write_to_file, args=(output_file,))
 
         # set threads to daemonic as we want them to be independent and die on sys exit
         thread_list = [receiver_thread, producer_thread]

@@ -24,9 +24,9 @@ class PacketHeader(F1LittleEndianStructure):
     @classmethod
     def unpack(cls, buf: bytes) -> F1LittleEndianStructure:
         header = cls.from_buffer_copy(buf)
-        packet_type = header["packet_id"]
+        packet_type = header.packet_id
         packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
-        return packet_class(packet_type, buf)
+        return packet_class.from_buffer_copy(buf)
 
 
 class MotionDataStructure(F1LittleEndianStructure):
@@ -131,7 +131,7 @@ class LapData(F1LittleEndianStructure):
 class PacketLapData(F1LittleEndianStructure):
     _fields_ = [
         ("header", PacketHeader),
-        ("lap_data", LapData),
+        ("lap_data", LapData * 20),
     ]
 
 
