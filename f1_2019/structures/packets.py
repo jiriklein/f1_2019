@@ -1,11 +1,21 @@
 import ctypes
 
 
-class PacketHeader(ctypes.LittleEndianStructure):
+class F1LittleEndianStructure(ctypes.LittleEndianStructure):
     # pack constant indicates tight packing (i.e. no byte-padding)
     # this is inherited all the way from _StructUnionMeta
     _pack_ = 1
     # fields is the ctypes schema in structures file
+
+    @staticmethod
+    def read_from(buf: bytes) -> ctypes.LittleEndianStructure:
+        header = PacketHeader.from_buffer_copy(buf)
+        packet_type = header["packet_id"]
+        packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
+        return packet_class(packet_type, buf)
+
+
+class PacketHeader(F1LittleEndianStructure):
     _fields_ = [
         ("packet_format", ctypes.c_uint16),
         ("game_major_version", ctypes.c_uint8),
@@ -18,15 +28,8 @@ class PacketHeader(ctypes.LittleEndianStructure):
         ("player_car_index", ctypes.c_uint8),
     ]
 
-    @staticmethod
-    def read_from(buf: bytes) -> ctypes.LittleEndianStructure:
-        header = PacketHeader.from_buffer_copy(buf)
-        packet_type = header["packet_id"]
-        packet_class = PACKET_TYPES.get(packet_type, PacketHeader)
-        return packet_class(packet_type, buf)
 
-
-class MotionDataStructure(PacketHeader):
+class MotionDataStructure(F1LittleEndianStructure):
     _fields_ = [
         ("world_position_x", ctypes.c_float),
         ("world_position_y", ctypes.c_float),
@@ -49,7 +52,7 @@ class MotionDataStructure(PacketHeader):
     ]
 
 
-class PacketMotionData(PacketHeader):
+class PacketMotionData(F1LittleEndianStructure):
     _fields_ = [
         ("header", PacketHeader),
         ("car_motion_data", MotionDataStructure * 20),
@@ -71,14 +74,14 @@ class PacketMotionData(PacketHeader):
     ]
 
 
-class MarshallZone(PacketHeader):
+class MarshallZone(F1LittleEndianStructure):
     _fields_ = [
         ("zone_start", ctypes.c_float),
         ("zone_flag", ctypes.c_int8),
     ]
 
 
-class PacketSessionData(PacketHeader):
+class PacketSessionData(F1LittleEndianStructure):
     _fields_ = [
         ("header", PacketHeader),
         ("weather", ctypes.c_uint8),
@@ -103,7 +106,7 @@ class PacketSessionData(PacketHeader):
     ]
 
 
-class LapData(PacketHeader):
+class LapData(F1LittleEndianStructure):
     _fields_ = [
         ("last_lap_time", ctypes.c_float),
         ("current_lap_time", ctypes.c_float),
@@ -125,26 +128,26 @@ class LapData(PacketHeader):
     ]
 
 
-class PacketLapData(PacketHeader):
+class PacketLapData(F1LittleEndianStructure):
     _fields_ = [
         ("header", PacketHeader),
         ("lap_data", LapData),
     ]
 
 
-class PacketEventData(PacketHeader):
+class PacketEventData(F1LittleEndianStructure):
     pass
 
 
-class PacketParticipantsData(PacketHeader):
+class PacketParticipantsData(F1LittleEndianStructure):
     pass
 
 
-class PacketCarSetupData(PacketHeader):
+class PacketCarSetupData(F1LittleEndianStructure):
     pass
 
 
-class CarTelemetryData(PacketHeader):
+class CarTelemetryData(F1LittleEndianStructure):
     _fields_ = [
         ("speed", ctypes.c_uint16),
         ("throttle", ctypes.c_float),
@@ -164,7 +167,7 @@ class CarTelemetryData(PacketHeader):
     ]
 
 
-class PacketCarTelemetryData(PacketHeader):
+class PacketCarTelemetryData(F1LittleEndianStructure):
     _fields_ = [
         ("header", PacketHeader),
         ("car_telemetry_data", CarTelemetryData * 20),
@@ -172,7 +175,7 @@ class PacketCarTelemetryData(PacketHeader):
     ]
 
 
-class PacketCarStatusData(PacketHeader):
+class PacketCarStatusData(F1LittleEndianStructure):
     pass
 
 
