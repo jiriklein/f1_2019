@@ -106,3 +106,27 @@ PACKET_LAP_DATA = [
     ('header', PACKET_HEADER),
     ('lap_data', LAP_DATA),
 ]
+
+CAR_TELEMETRY_DATA = [
+    ('speed', ctypes.c_uint16),
+    ('throttle', ctypes.c_float),
+    ('steer', ctypes.c_float),
+    ('brake', ctypes.c_float),
+    ('clutch', ctypes.c_uint8),
+    ('gear', ctypes.c_int8),
+    ('engine_rpm', ctypes.c_uint16),
+    ('drs', ctypes.c_uint8),
+    ('rev_lights_percent', ctypes.c_uint8),
+    ('brakes_temperature', ctypes.c_uint16 * 4),
+    ('tyres_surface_temperature', ctypes.c_uint16 * 4),
+    ('tyres_inner_temperature', ctypes.c_uint16 * 4),
+    ('engine_temperature', ctypes.c_uint16),
+    ('tyres_pressure', ctypes.c_float * 4),
+    ('surface_type', ctypes.c_uint8 * 4),
+]
+
+PACKET_TELEMETRY_DATA = [
+    ('header', PACKET_HEADER),
+    ('car_telemetry_data', CAR_TELEMETRY_DATA * 20),
+    ('button_status', ctypes.c_uint32),
+]

@@ -1,6 +1,12 @@
 from ctypes import LittleEndianStructure
 
-from f1_2019.structures.structures import PACKET_HEADER, PACKET_MOTION_DATA, PACKET_SESSION_DATA
+from f1_2019.structures.structures import (
+    PACKET_HEADER,
+    PACKET_MOTION_DATA,
+    PACKET_SESSION_DATA,
+    PACKET_LAP_DATA,
+    PACKET_TELEMETRY_DATA
+)
 
 
 class PacketHeader(LittleEndianStructure):
@@ -27,7 +33,7 @@ class PacketSessionData(PacketHeader):
 
 
 class PacketLapData(PacketHeader):
-    pass
+    _fields_ = PACKET_LAP_DATA
 
 
 class PacketEventData(PacketHeader):
@@ -43,7 +49,7 @@ class PacketCarSetupData(PacketHeader):
 
 
 class PacketCarTelemetryData(PacketHeader):
-    pass
+    _fields_ = PACKET_TELEMETRY_DATA
 
 
 class PacketCarStatusData(PacketHeader):
