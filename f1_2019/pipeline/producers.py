@@ -8,7 +8,10 @@ class F1Producer:
     _QUEUE_GET_TIMEOUT = 5.0
 
     def __init__(
-        self, input_q: Queue, thread_end_event: Event, config: Dict[str, Union[str, int]] = None
+        self,
+        input_q: Queue,
+        thread_end_event: Event,
+        config: Dict[str, Union[str, int]] = None,
     ):
         kafka_config = config or {"bootstrap.servers": "localhost:9092"}
         self._kafka_producer = None
@@ -24,7 +27,7 @@ class F1Producer:
         while True and not self._end_event.is_set():
             try:
                 packet = self._queue.get(True, self._QUEUE_GET_TIMEOUT)
-                if hasattr(packet, 'lap_data'):
+                if hasattr(packet, "lap_data"):
                     print(packet.lap_data[0].total_distance)
                 # file_output.write(packet)
                 self.produced_messages += 1
