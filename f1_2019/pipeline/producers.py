@@ -4,6 +4,7 @@ from typing import Dict, Union, AnyStr, IO, Any, List
 import json
 
 from f1_2019.models.participant import Participant
+from f1_2019.structures.packets import CarTelemetryData
 
 
 class F1Producer:
@@ -25,12 +26,12 @@ class F1Producer:
     def make_kafka_packet(cls, topic_name: str, payload: dict) -> Dict[str, Any]:
         return dict(topic=topic_name, key="telemetry", value=json.dumps(payload))
 
-    def update_participants(self, participants: List[Participant]) -> None:
+    def resolve_packet_type(self, participants: List[Participant]):
         while True and not self._end_event.is_set():
             try:
                 packet = self._queue.get(True, self._QUEUE_GET_TIMEOUT)
-                for participant in participants:
-                    pass
+                if isinstance(packet, CarTelemetryData):
+                    self._update_participants(packet, participants)
 
             except Empty:
                 if self._end_event.is_set():
@@ -38,6 +39,19 @@ class F1Producer:
                     break
                 else:
                     continue
+
+    @staticmethod
+    def _update_participants(packet: CarTelemetryData, participants: List[Participant]) -> List[Participant]:
+        player_car_idx = packet.header.player_car_index
+        telemetry_data_player = packet.car_telemetry_data[player_car_idx]
+
+        # player car always first for now
+        participants[0].brake = telemetry_data_player.brake
+        participants[0].speed = telemetry_data_player.speed
+        participants[0].steer = telemetry_data_player.steer
+        participants[0].engine_rpm = telemetry_data_player.engine_rpm
+
+        return participants
 
     def write_to_file(self, file_output: IO[AnyStr]) -> None:
         while True and not self._end_event.is_set():
