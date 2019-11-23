@@ -41,7 +41,9 @@ class F1Producer:
                     continue
 
     @staticmethod
-    def _update_participants(packet: CarTelemetryData, participants: List[Participant]) -> List[Participant]:
+    def _update_participants(
+        packet: CarTelemetryData, participants: List[Participant]
+    ) -> List[Participant]:
         player_car_idx = packet.header.player_car_index
         telemetry_data_player = packet.car_telemetry_data[player_car_idx]
 
