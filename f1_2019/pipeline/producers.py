@@ -4,7 +4,7 @@ from typing import Dict, Union, AnyStr, IO, Any, List
 import json
 
 from f1_2019.models.participant import Participant
-from f1_2019.structures.packets import CarTelemetryData
+from f1_2019.structures.packets import PacketCarTelemetryData
 
 
 class F1Producer:
@@ -30,8 +30,9 @@ class F1Producer:
         while True and not self._end_event.is_set():
             try:
                 packet = self._queue.get(True, self._QUEUE_GET_TIMEOUT)
-                if isinstance(packet, CarTelemetryData):
+                if isinstance(packet, PacketCarTelemetryData):
                     self._update_participants(packet, participants)
+                    self.produced_messages += 1
 
             except Empty:
                 if self._end_event.is_set():
@@ -42,11 +43,10 @@ class F1Producer:
 
     @staticmethod
     def _update_participants(
-        packet: CarTelemetryData, participants: List[Participant]
+        packet: PacketCarTelemetryData, participants: List[Participant]
     ) -> List[Participant]:
         player_car_idx = packet.header.player_car_index
         telemetry_data_player = packet.car_telemetry_data[player_car_idx]
-
         # player car always first for now
         participants[0].brake = telemetry_data_player.brake
         participants[0].speed = telemetry_data_player.speed
