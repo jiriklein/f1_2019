@@ -1,6 +1,9 @@
 from queue import Queue
 from threading import Event, Thread
 from typing import List
+import time
+
+import streamlit as st
 
 from f1_2019.pipeline.producers import F1Producer
 from f1_2019.pipeline.receiver import F1Receiver
@@ -61,4 +64,10 @@ game.daemon = True
 
 
 if __name__ == "__main__":
+    st.title("F1 Dashboard")
     game.start()
+
+    empty_element = st.empty()
+    while True:
+        empty_element.text(dict(participant_list[0]))
+        time.sleep(1)

@@ -9,3 +9,11 @@ class Participant:
         self.clutch = 0
         self.gear = 0
         self.engine_rpm = 0
+
+    def __iter__(self):
+        yield "speed", self.speed
+        yield "throttle", self.throttle
+        yield "brake", self.brake
+        yield "clutch", self.clutch
+        yield "gear", self.gear
+        yield "engine_rpm", self.engine_rpm

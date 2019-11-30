@@ -22,11 +22,14 @@ class F1Receiver:
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._socket.settimeout(self._SOCKET_TIMEOUT)
 
-        # Bind to the server address
-        self._socket.bind(("", self._port))
+        # set socket options
         group = socket.inet_aton(self._MULTICAST_ANY)
         _req = struct.pack("4sL", group, socket.INADDR_ANY)
         self._socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, _req)
+        self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Bind to the server address
+        self._socket.bind(("", self._port))
 
     def listen(self) -> None:
         while True and not self._end_event.is_set():
