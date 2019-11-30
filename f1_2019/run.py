@@ -2,9 +2,6 @@ from queue import Queue
 from threading import Event, Thread
 from typing import List
 
-import flask
-from flask import Flask
-
 from f1_2019.pipeline.producers import F1Producer
 from f1_2019.pipeline.receiver import F1Receiver
 from f1_2019.models.participant import Participant
@@ -58,18 +55,10 @@ def f1_pipeline(participants: List[Participant]):
             break
 
 
-app = Flask(__name__)
-
 participant_list = [Participant() for i in range(20)]
 game = Thread(target=f1_pipeline, args=(participant_list,))
 game.daemon = True
 
 
-@app.route('/get_updates')
-def get_updates():
-    return flask.jsonify(participant_list[0].__dict__)
-
-
 if __name__ == "__main__":
     game.start()
-    app.run(port=80, host='0.0.0.0', debug=False, use_reloader=False)
